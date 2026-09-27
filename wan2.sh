@@ -1,8 +1,17 @@
 #!/bin/bash
+cd /workspace/ComfyUI
+
+mkdir -p user/default
+
+cat > user/default/comfy.settings.json <<'EOF'
+{
+  "Comfy.Locale": "en"
+}
+EOF
+
 set -e
 hf auth login --token "$HF_TOKEN"
 
-cd /workspace/ComfyUI 
 npm install -g @civitai/cli 
 civitai login --token "$CIVITAI_TOKEN"
 civitai download --version 2540892 --out-dir ./models/diffusion_models 
