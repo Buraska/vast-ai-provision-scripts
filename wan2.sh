@@ -2,7 +2,7 @@
 set -e
 hf auth login --token "$HF_TOKEN"
 
-cd ./ComfyUI 
+cd /workspace/ComfyUI 
 npm install -g @civitai/cli 
 civitai login --token "$CIVITAI_TOKEN"
 civitai download --version 2540892 --out-dir ./models/diffusion_models 
