@@ -1,4 +1,6 @@
 #!/bin/bash
+
+set -euo pipefail
 cd /workspace/ComfyUI
 
 mkdir -p user/default
@@ -9,7 +11,6 @@ cat > user/default/comfy.settings.json <<'EOF'
 }
 EOF
 
-set -e
 hf auth login --token "$HF_TOKEN"
 
 npm install -g @civitai/cli 
