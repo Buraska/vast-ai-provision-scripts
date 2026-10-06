@@ -17,6 +17,15 @@ EOF
 mkdir -p ./models/diffusion_models/flux2 ./models/text_encoders ./models/vae ./models/upscale_models ./models/loras
 
 hf auth login --token "$HF_TOKEN"
+export NVM_DIR=/opt/nvm
+if [[ ! -s "$NVM_DIR/nvm.sh" ]]; then
+  printf 'Vast Node.js/NVM runtime missing: %s/nvm.sh\n' "$NVM_DIR" >&2
+  exit 1
+fi
+set +u
+. "$NVM_DIR/nvm.sh"
+nvm use --lts
+set -u
 npm install -g @civitai/cli
 civitai login --token "$CIVITAI_TOKEN"
 
