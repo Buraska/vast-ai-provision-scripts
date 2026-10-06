@@ -3,6 +3,14 @@
 set -euo pipefail
 cd /workspace/ComfyUI
 
+mkdir -p user/default
+
+cat > user/default/comfy.settings.json <<'EOF'
+{
+  "Comfy.Locale": "en"
+}
+EOF
+
 : "${HF_TOKEN:?Set HF_TOKEN in the environment before provisioning}"
 : "${CIVITAI_TOKEN:?Set CIVITAI_TOKEN in the environment before provisioning}"
 
