@@ -68,8 +68,8 @@ download_hf_file \
   ESRGAN/4x_fatal_Anime_500000_G.pth \
   ./models/upscale_models/4x_fatal_Anime_500000_G.pth
 
-civitai download --version 2960556 --out-dir ./models/loras
-civitai download --version 2986256 --out-dir ./models/loras
-civitai download --version 2740209 --out-dir ./models/loras
-civitai download --version 3272965 --out-dir ./models/loras
-civitai download --version 2792383 --out-dir ./models/loras
+civitai download 2960556 --out-dir ./models/loras
+civitai download 2986256 --out-dir ./models/loras
+civitai download 2792383 --out-dir ./models/loras
+civitai download 2740209 --out-dir ./models/diffusion_models/flux2
+civitai download 3272965 --out-dir ./models/diffusion_models/flux2
