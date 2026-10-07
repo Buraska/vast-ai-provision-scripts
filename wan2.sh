@@ -29,6 +29,9 @@ wget -P ./models/clip_vision https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_re
 
 hf download hf://gemasai/4x_NMKD-Siax_200k/4x_NMKD-Siax_200k.pth --local-dir ./models/upscale_models
 
+wget -P ./models/clip_vision https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors 
+
+
 civitai download --version 2152516 --out-dir ./models/loras
 civitai download --version 2152583 --out-dir ./models/loras
 
