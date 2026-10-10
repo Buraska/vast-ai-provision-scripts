@@ -17,7 +17,7 @@ mkdir -p ./models/diffusion_models ./models/vae ./models/text_encoders ./models/
 
 npm install -g @civitai/cli
 civitai login --token "$CIVITAI_TOKEN"
-civitai download --version 2540892 --out-dir ./models/diffusion_models 
+civitai download --model 2053259 --out-dir ./models/diffusion_models 
 civitai download --version 2540896 --out-dir ./models/diffusion_models 
 ## REGULAR
 # civitai download --version 2668710 --out-dir ./models/diffusion_models 
