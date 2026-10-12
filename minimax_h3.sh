@@ -83,5 +83,5 @@ download_hf_file \
 #   ./models/diffusion_models/minimax_h3_fl2va_int8_convrot.safetensors
 
 civitai download --model 2836176 --out-dir ./models/loras
-civitai download --model 2851079 --out-dir ./models/diffusion_models
-civitai download --version 3391862 --out-dir ./models/checkpoints
+# civitai download --model 2851079 --out-dir ./models/diffusion_models
+civitai download --version 3391862 --out-dir ./models/diffusion_models
