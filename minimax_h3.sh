@@ -72,10 +72,10 @@ download_hf_file \
   text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors \
   ./models/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors
 
-download_hf_file \
-  Comfy-Org/MiniMax-H3 \
-  diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors \
-  ./models/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors
+# download_hf_file \
+#   Comfy-Org/MiniMax-H3 \
+#   diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors \
+#   ./models/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors
 
 # download_hf_file \
 #   Comfy-Org/MiniMax-H3 \
