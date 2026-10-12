@@ -77,10 +77,10 @@ download_hf_file \
   diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors \
   ./models/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors
 
-download_hf_file \
-  Comfy-Org/MiniMax-H3 \
-  diffusion_models/minimax_h3_fl2va_int8_convrot.safetensors \
-  ./models/diffusion_models/minimax_h3_fl2va_int8_convrot.safetensors
+# download_hf_file \
+#   Comfy-Org/MiniMax-H3 \
+#   diffusion_models/minimax_h3_fl2va_int8_convrot.safetensors \
+#   ./models/diffusion_models/minimax_h3_fl2va_int8_convrot.safetensors
 
 civitai download --model 2836176 --out-dir ./models/loras
 civitai download --model 2851079 --out-dir ./models/diffusion_models
