@@ -94,5 +94,5 @@ download_hf_file \
 
 civitai download --model 2836176 --out-dir ./models/loras
 # civitai download --model 2851079 --out-dir ./models/diffusion_models
-civitai download --version 3391862 --out-dir ./models/diffusion_models
+# civitai download --version 3391862 --out-dir ./models/diffusion_models
 civitai download --version 3392061 --out-dir ./models/diffusion_models
