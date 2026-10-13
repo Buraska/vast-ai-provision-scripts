@@ -14,7 +14,7 @@ EOF
 : "${HF_TOKEN:?Set HF_TOKEN in the environment before provisioning}"
 : "${CIVITAI_TOKEN:?Set CIVITAI_TOKEN in the environment before provisioning}"
 
-mkdir -p ./models/diffusion_models ./models/text_encoders ./models/vae ./models/loras ./models/checkpoints
+mkdir -p ./models/diffusion_models ./models/text_encoders ./models/vae ./models/loras ./models/checkpoints ./models/frame_interpolation ./models/latent_upscale_models
 
 hf auth login --token "$HF_TOKEN"
 export NVM_DIR=/opt/nvm
@@ -82,6 +82,17 @@ download_hf_file \
 #   diffusion_models/minimax_h3_fl2va_int8_convrot.safetensors \
 #   ./models/diffusion_models/minimax_h3_fl2va_int8_convrot.safetensors
 
+download_hf_file \
+  Comfy-Org/frame_interpolation \
+  frame_interpolation/rife_v4.26.safetensors \
+  ./models/frame_interpolation/rife_v4.26.safetensors
+
+download_hf_file \
+  LBH-123-AI/Minimax_h3_latent_Upscaler \
+  minimax_h3_latent_upscaler_3d_conv_v1/minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors \
+  ./models/latent_upscale_models/minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors
+
 civitai download --model 2836176 --out-dir ./models/loras
 # civitai download --model 2851079 --out-dir ./models/diffusion_models
 civitai download --version 3391862 --out-dir ./models/diffusion_models
+civitai download --version 3392061 --out-dir ./models/diffusion_models
