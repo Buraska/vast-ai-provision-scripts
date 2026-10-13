@@ -71,6 +71,7 @@ download_hf_file \
   Comfy-Org/MiniMax-H3 \
   text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors \
   ./models/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors
+hf download Qwen/Qwen3-VL-8B-Instruct --local-dir ./models/llm/Qwen3-VL-8B-Instruct
 
 # download_hf_file \
 #   Comfy-Org/MiniMax-H3 \
@@ -93,6 +94,7 @@ download_hf_file \
   ./models/latent_upscale_models/minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors
 
 civitai download --model 2836176 --out-dir ./models/loras
+civitai download --version 3266628 --out-dir ./models/loras
 # civitai download --model 2851079 --out-dir ./models/diffusion_models
 # civitai download --version 3391862 --out-dir ./models/diffusion_models
 civitai download --version 3392061 --out-dir ./models/diffusion_models
