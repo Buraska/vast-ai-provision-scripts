@@ -77,7 +77,10 @@ hf download Qwen/Qwen3-VL-8B-Instruct --local-dir ./models/llm/Qwen3-VL-8B-Instr
 #   Comfy-Org/MiniMax-H3 \
 #   diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors \
 #   ./models/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors
-
+download_hf_file \
+  Comfy-Org/MiniMax-H3 \
+  loras/minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors \
+  ./models/loras/minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors
 # download_hf_file \
 #   Comfy-Org/MiniMax-H3 \
 #   diffusion_models/minimax_h3_fl2va_int8_convrot.safetensors \
@@ -98,3 +101,7 @@ civitai download --version 3266628 --out-dir ./models/loras
 # civitai download --model 2851079 --out-dir ./models/diffusion_models
 # civitai download --version 3391862 --out-dir ./models/diffusion_models
 civitai download --version 3392061 --out-dir ./models/diffusion_models
+
+# Eros checkpoint
+# civitai download --version 3354822 --out-dir ./models/diffusion_models
+
