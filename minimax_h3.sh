@@ -67,34 +67,45 @@ download_hf_file \
   vae/minimax_h3_audio_vae_fp32.safetensors \
   ./models/vae/minimax_h3_audio_vae_fp32.safetensors
 
-download_hf_file \
-  Comfy-Org/MiniMax-H3 \
-  text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors \
-  ./models/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors
-hf download Qwen/Qwen3-VL-8B-Instruct --local-dir ./models/llm/Qwen3-VL-8B-Instruct
+# download_hf_file \
+#   Comfy-Org/MiniMax-H3 \
+#   text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors \
+#   ./models/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors
+# hf download Qwen/Qwen3-VL-8B-Instruct --local-dir ./models/llm/Qwen3-VL-8B-Instruct
 
 # download_hf_file \
 #   Comfy-Org/MiniMax-H3 \
 #   diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors \
 #   ./models/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors
-download_hf_file \
-  Comfy-Org/MiniMax-H3 \
-  loras/minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors \
-  ./models/loras/minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors
+
 # download_hf_file \
 #   Comfy-Org/MiniMax-H3 \
 #   diffusion_models/minimax_h3_fl2va_int8_convrot.safetensors \
 #   ./models/diffusion_models/minimax_h3_fl2va_int8_convrot.safetensors
+download_hf_file \
+  Comfy-Org/MiniMax-H3 \
+  text_encoders/qwen3vl_32b_minimax_h3_bf16.safetensors \
+  ./models/text_encoders/qwen3vl_32b_minimax_h3_bf16.safetensors
+
+download_hf_file \
+  Comfy-Org/MiniMax-H3 \
+  diffusion_models/minimax_h3_fl2va_int8_convrot.safetensors \
+  ./models/diffusion_models/minimax_h3_fl2va_int8_convrot.safetensors
+
+  download_hf_file \
+  Comfy-Org/MiniMax-H3 \
+  loras/minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors \
+  ./models/loras/minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors
 
 download_hf_file \
   Comfy-Org/frame_interpolation \
   frame_interpolation/rife_v4.26.safetensors \
   ./models/frame_interpolation/rife_v4.26.safetensors
 
-download_hf_file \
-  LBH-123-AI/Minimax_h3_latent_Upscaler \
-  minimax_h3_latent_upscaler_3d_conv_v1/minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors \
-  ./models/latent_upscale_models/minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors
+# download_hf_file \
+#   LBH-123-AI/Minimax_h3_latent_Upscaler \
+#   minimax_h3_latent_upscaler_3d_conv_v1/minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors \
+#   ./models/latent_upscale_models/minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors
 
 civitai download --model 2836176 --out-dir ./models/loras
 civitai download --version 3266628 --out-dir ./models/loras
