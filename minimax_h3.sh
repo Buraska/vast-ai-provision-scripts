@@ -2,6 +2,10 @@
 
 set -euo pipefail
 cd /workspace/ComfyUI
+# Use the latest upstream ComfyUI master, rather than the base-image checkout.
+git fetch origin master
+git checkout --detach FETCH_HEAD
+python -m pip install -r requirements.txt
 
 mkdir -p user/default
 
@@ -10,6 +14,15 @@ cat > user/default/comfy.settings.json <<'EOF'
   "Comfy.Locale": "en"
 }
 EOF
+
+workspace_env="${WORKSPACE:-/workspace}/.env"
+mkdir -p "${workspace_env%/*}"
+env_tmp="$(mktemp "${workspace_env}.XXXXXX")"
+if [[ -f "$workspace_env" ]]; then
+  awk -F= '$1 !~ /^[[:space:]]*(export[[:space:]]+)?COMFYUI_ARGS[[:space:]]*$/' "$workspace_env" > "$env_tmp"
+fi
+printf '%s\n' 'COMFYUI_ARGS="--disable-auto-launch --disable-xformers --port 18188 --enable-cors-header --enable-manager"' >> "$env_tmp"
+mv "$env_tmp" "$workspace_env"
 
 : "${HF_TOKEN:?Set HF_TOKEN in the environment before provisioning}"
 : "${CIVITAI_TOKEN:?Set CIVITAI_TOKEN in the environment before provisioning}"
@@ -71,7 +84,16 @@ download_hf_file \
   Comfy-Org/MiniMax-H3 \
   text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors \
   ./models/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors
-# hf download Qwen/Qwen3-VL-8B-Instruct --local-dir ./models/llm/Qwen3-VL-8B-Instruct
+download_hf_file \
+  Comfy-Org/MiniMax-H3 \
+  text_encoders/qwen3vl_32b_minimax_h3_bf16.safetensors \
+  ./models/text_encoders/qwen3vl_32b_minimax_h3_bf16.safetensors
+hf download Qwen/Qwen3-VL-8B-Instruct --local-dir ./models/llm/Qwen3-VL-8B-Instruct
+
+download_hf_file \
+  Comfy-Org/MiniMax-H3 \
+  diffusion_models/minimax_h3_fl2va_int8_convrot.safetensors \
+  ./models/diffusion_models/minimax_h3_fl2va_int8_convrot.safetensors
 
 # download_hf_file \
 #   Comfy-Org/MiniMax-H3 \
@@ -118,3 +140,76 @@ civitai download --version 3393047 --out-dir ./models/diffusion_models
 # ero unlocked lora
 # civitai download --version 3354822 --out-dir ./models/loras
 
+# Install the Gemma GGUF alongside the MiniMax H3 ComfyUI assets.
+GEMMA_REPO="okanity/gemma-4-31B-it-uncensored-heretic-GGUF"
+GEMMA_FILE="gemma-4-31B-it-uncensored-heretic-Q5_K_M.gguf"
+GEMMA_NAME="gemma4-heretic:12k"
+OLLAMA_DIR="/workspace/ollama-data"
+OLLAMA_LOG="/workspace/ollama.log"
+GEMMA_PATH="/workspace/models/$GEMMA_FILE"
+
+echo "=== Checking GPU for Ollama ==="
+nvidia-smi
+
+echo "=== Installing Ollama dependencies ==="
+apt-get update
+apt-get install -y curl ca-certificates
+
+mkdir -p /workspace/models "$OLLAMA_DIR"
+
+echo "=== Installing Ollama ==="
+if ! command -v ollama >/dev/null 2>&1; then
+  curl -fsSL https://ollama.com/install.sh | sh
+fi
+
+echo "=== Starting Ollama ==="
+export OLLAMA_HOST="127.0.0.1:11434"
+export OLLAMA_MODELS="$OLLAMA_DIR"
+export OLLAMA_CONTEXT_LENGTH=12288
+
+if command -v systemctl >/dev/null 2>&1; then
+  systemctl stop ollama 2>/dev/null || true
+fi
+pkill -x ollama 2>/dev/null || true
+sleep 2
+nohup ollama serve > "$OLLAMA_LOG" 2>&1 &
+echo $! > /workspace/ollama.pid
+
+echo "=== Waiting for Ollama API ==="
+READY=0
+for i in $(seq 1 60); do
+  if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null 2>&1; then
+    READY=1
+    break
+  fi
+  sleep 2
+done
+if [[ "$READY" -ne 1 ]]; then
+  echo "Ollama failed to start. Log:"
+  tail -80 "$OLLAMA_LOG"
+  exit 1
+fi
+
+echo "=== Downloading Gemma 4 Q5_K_M ==="
+download_hf_file "$GEMMA_REPO" "$GEMMA_FILE" "$GEMMA_PATH"
+
+cat > /workspace/Modelfile <<EOF
+FROM $GEMMA_PATH
+PARAMETER num_ctx 12288
+PARAMETER temperature 0.7
+EOF
+
+echo "=== Importing Gemma model into Ollama ==="
+ollama create "$GEMMA_NAME" -f /workspace/Modelfile
+ollama list
+
+echo "=== Testing Gemma model ==="
+curl -fsS http://127.0.0.1:11434/api/generate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gemma4-heretic:12k",
+    "prompt": "Say hello in Russian.",
+    "stream": false,
+    "options": {"num_ctx": 12288, "num_predict": 60}
+  }'
+echo

@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "3d-animation-short-generator": {
+      "source": "MiniMax-AI/MiniMax-H3",
+      "sourceType": "github",
+      "skillPath": "skills/3d-animation-short-generator/SKILL.md",
+      "computedHash": "c4e7e37c05ec9069302405a0ea24518eeb69bbd293d8c019abc3066240f862ea"
+    }
+  }
+}
