@@ -70,6 +70,7 @@ download_hf_file() {
   rm -rf -- "$scratch_dir"
 }
 
+
 download_hf_file \
   Comfy-Org/MiniMax-H3 \
   vae/minimax_h3_video_vae_fp16.safetensors \
@@ -103,15 +104,16 @@ civitai download --version 3354822 --out-dir ./models/loras
 # h3 max ero
 civitai download --version 3393047 --out-dir ./models/diffusion_models
 
-# ero unlocked lora
 
 # Install the Gemma GGUF alongside the MiniMax H3 ComfyUI assets.
 GEMMA_REPO="okanity/gemma-4-31B-it-uncensored-heretic-GGUF"
 GEMMA_FILE="gemma-4-31B-it-uncensored-heretic-Q5_K_M.gguf"
-GEMMA_NAME="gemma4-heretic:12k"
+GEMMA_PROJECTOR_FILE="gemma-4-31B-it-mmproj-BF16.gguf"
+GEMMA_NAME="gemma4-heretic:12k-vision"
 OLLAMA_DIR="/workspace/ollama-data"
 OLLAMA_LOG="/workspace/ollama.log"
 GEMMA_PATH="/workspace/models/$GEMMA_FILE"
+GEMMA_PROJECTOR_PATH="/workspace/models/$GEMMA_PROJECTOR_FILE"
 
 echo "=== Checking GPU for Ollama ==="
 nvidia-smi
@@ -155,24 +157,30 @@ if [[ "$READY" -ne 1 ]]; then
   exit 1
 fi
 
-echo "=== Downloading Gemma 4 Q5_K_M ==="
+echo "=== Downloading Gemma 4 Q5_K_M and vision projector ==="
 download_hf_file "$GEMMA_REPO" "$GEMMA_FILE" "$GEMMA_PATH"
+download_hf_file "$GEMMA_REPO" "$GEMMA_PROJECTOR_FILE" "$GEMMA_PROJECTOR_PATH"
 
-cat > /workspace/Modelfile <<EOF
+cat > /workspace/Modelfile.vision <<EOF
 FROM $GEMMA_PATH
+FROM $GEMMA_PROJECTOR_PATH
 PARAMETER num_ctx 12288
 PARAMETER temperature 0.7
 EOF
 
-echo "=== Importing Gemma model into Ollama ==="
-ollama create "$GEMMA_NAME" -f /workspace/Modelfile
+echo "=== Importing Gemma vision model into Ollama ==="
+ollama create "$GEMMA_NAME" -f /workspace/Modelfile.vision
+if ! ollama show "$GEMMA_NAME" | grep -qi vision; then
+  echo "Gemma vision model was created without vision capability." >&2
+  exit 1
+fi
 ollama list
 
 echo "=== Testing Gemma model ==="
 curl -fsS http://127.0.0.1:11434/api/generate \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "gemma4-heretic:12k",
+    "model": "gemma4-heretic:12k-vision",
     "prompt": "Say hello in Russian.",
     "stream": false,
     "options": {"num_ctx": 12288, "num_predict": 60}
