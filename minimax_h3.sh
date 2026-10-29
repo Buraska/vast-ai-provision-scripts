@@ -104,6 +104,8 @@ civitai download --version 3354822 --out-dir ./models/loras
 civitai download --version 3257589 --out-dir ./models/loras
 civitai download --version 3283175 --out-dir ./models/loras
 
+civitai download --version 3265246 --out-dir ./models/loras
+
 # h3 max ero
 civitai download --version 3393047 --out-dir ./models/diffusion_models
 
