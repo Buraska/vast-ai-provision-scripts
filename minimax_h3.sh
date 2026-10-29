@@ -84,40 +84,7 @@ download_hf_file \
   Comfy-Org/MiniMax-H3 \
   text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors \
   ./models/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors
-download_hf_file \
-  Comfy-Org/MiniMax-H3 \
-  text_encoders/qwen3vl_32b_minimax_h3_bf16.safetensors \
-  ./models/text_encoders/qwen3vl_32b_minimax_h3_bf16.safetensors
-hf download Qwen/Qwen3-VL-8B-Instruct --local-dir ./models/llm/Qwen3-VL-8B-Instruct
-
-download_hf_file \
-  Comfy-Org/MiniMax-H3 \
-  diffusion_models/minimax_h3_fl2va_int8_convrot.safetensors \
-  ./models/diffusion_models/minimax_h3_fl2va_int8_convrot.safetensors
-
-# download_hf_file \
-#   Comfy-Org/MiniMax-H3 \
-#   diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors \
-#   ./models/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors
-
-# download_hf_file \
-#   Comfy-Org/MiniMax-H3 \
-#   diffusion_models/minimax_h3_fl2va_int8_convrot.safetensors \
-#   ./models/diffusion_models/minimax_h3_fl2va_int8_convrot.safetensors
-# download_hf_file \
-#   Comfy-Org/MiniMax-H3 \
-#   text_encoders/qwen3vl_32b_minimax_h3_bf16.safetensors \
-#   ./models/text_encoders/qwen3vl_32b_minimax_h3_bf16.safetensors
-
-# download_hf_file \
-#   Comfy-Org/MiniMax-H3 \
-#   diffusion_models/minimax_h3_fl2va_int8_convrot.safetensors \
-#   ./models/diffusion_models/minimax_h3_fl2va_int8_convrot.safetensors
-
-  # download_hf_file \
-  # Comfy-Org/MiniMax-H3 \
-  # loras/minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors \
-  # ./models/loras/minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors
+  
 
 download_hf_file \
   Comfy-Org/frame_interpolation \
@@ -129,16 +96,14 @@ download_hf_file \
 #   minimax_h3_latent_upscaler_3d_conv_v1/minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors \
 #   ./models/latent_upscale_models/minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors
 
-# civitai download --model 2836176 --out-dir ./models/loras
-# civitai download --version 3266628 --out-dir ./models/loras
-# civitai download --model 2851079 --out-dir ./models/diffusion_models
-# civitai download --version 3391862 --out-dir ./models/diffusion_models
-# civitai download --version 3392061 --out-dir ./models/diffusion_models
+civitai download --model 2836176 --out-dir ./models/loras
+civitai download --version 3266628 --out-dir ./models/loras
+civitai download --version 3354822 --out-dir ./models/loras
+
 # h3 max ero
 civitai download --version 3393047 --out-dir ./models/diffusion_models
 
 # ero unlocked lora
-# civitai download --version 3354822 --out-dir ./models/loras
 
 # Install the Gemma GGUF alongside the MiniMax H3 ComfyUI assets.
 GEMMA_REPO="okanity/gemma-4-31B-it-uncensored-heretic-GGUF"
