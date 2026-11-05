@@ -215,16 +215,50 @@ download_hf hf://Comfy-Org/Wan_2.1_ComfyUI_repackaged/split_files/vae/wan_2.1_va
 # Uncensored Qwen3-VL encoder
 download_hf hf://ahmed22xa/Huihui-Qwen3-VL-4B-Instruct-abliterated-comfy/Huihui-Qwen3-VL-4B-Instruct-abliterated.safetensors ./ComfyUI/models/text_encoders
 
-# Krea 2 LoRAs. Pin the versions currently selected by the old --model IDs.
-download_civitai_primary 3409322 ./ComfyUI/models/loras
-download_civitai_primary 3071760 ./ComfyUI/models/loras
-download_civitai_primary 3168308 ./ComfyUI/models/loras
+# Krea 2 LoRAs selected in earlier provisioning sessions; pin exact Civitai versions.
+download_civitai_primary 3409322 ./ComfyUI/models/loras # General Edit V2 primary file
+download_civitai_primary 3139172 ./ComfyUI/models/loras # Identity Edit v1.2
+download_civitai_primary 3071760 ./ComfyUI/models/loras # NSFW LoRA
+download_civitai_primary 3168308 ./ComfyUI/models/loras # Mrpopo anime art
+download_civitai_primary 3409158 ./ComfyUI/models/loras # IntoRealism
+download_civitai_primary 3065628 ./ComfyUI/models/loras # Realism Enhancer
+download_civitai_primary 3387132 ./ComfyUI/models/loras # Genderbent Draco
+download_civitai_primary 3387608 ./ComfyUI/models/loras # Draconia Malfoid
 
-# Qwen Image VAE
+# Krea 2 and Qwen assets used by the saved identity-edit workflow.
 download_hf_file \
-  circlestone-labs/Anima \
-  split_files/vae/qwen_image_vae.safetensors \
+  Comfy-Org/Krea-2 \
+  diffusion_models/krea2_turbo_int8_convrot.safetensors \
+  ./ComfyUI/models/diffusion_models/krea2_turbo_int8_convrot.safetensors
+download_hf_file \
+  Comfy-Org/Krea-2 \
+  diffusion_models/krea2_turbo_bf16.safetensors \
+  ./ComfyUI/models/diffusion_models/krea2_turbo_bf16.safetensors
+download_hf_file \
+  Comfy-Org/Krea-2 \
+  text_encoders/qwen3vl_4b_fp8_scaled.safetensors \
+  ./ComfyUI/models/text_encoders/qwen3vl_4b_fp8_scaled.safetensors
+download_hf_file \
+  Comfy-Org/Krea-2 \
+  text_encoders/qwen3vl_4b_bf16.safetensors \
+  ./ComfyUI/models/text_encoders/qwen3vl_4b_bf16.safetensors
+download_hf_file \
+  Comfy-Org/Krea-2 \
+  vae/qwen_image_vae.safetensors \
   ./ComfyUI/models/vae/qwen_image_vae.safetensors
+download_hf_file \
+  Comfy-Org/Krea-2 \
+  loras/krea2_style_reference.safetensors \
+  ./ComfyUI/models/loras/krea2_style_reference.safetensors
+download_hf_file \
+  conradlocke/krea2-identity-edit \
+  krea2_identity_edit_v2.safetensors \
+  ./ComfyUI/models/loras/krea2_identity_edit_v2.safetensors
+
+# Additional Krea 2-compatible text encoder and HDR VAE from prior sessions.
+download_civitai_primary 3070870 ./ComfyUI/models/text_encoders
+download_civitai_primary 3054852 ./ComfyUI/models/vae
+
 
 
 printf 'Krea 2 assets are installed.\n'
