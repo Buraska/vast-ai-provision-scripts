@@ -210,7 +210,7 @@ mkdir -p \
 
 # Krea 2 LoRAs selected in earlier provisioning sessions; pin exact Civitai versions.
 download_civitai_primary 3409322 ./ComfyUI/models/loras # General Edit V2 primary file
-hf download conradlocke/krea2-identity-edit krea2_identity_edit_v2.safetensors --local-dir ./ComfyUI/models/loras# Identity Edit v1.2
+hf download conradlocke/krea2-identity-edit krea2_identity_edit_v2.safetensors --local-dir ./ComfyUI/models/loras # Identity Edit v1.2
 download_civitai_primary 3071760 ./ComfyUI/models/loras # NSFW LoRA
 download_civitai_primary 3168308 ./ComfyUI/models/loras # Mrpopo anime art
 download_civitai_primary 3409158 ./ComfyUI/models/loras # IntoRealism
