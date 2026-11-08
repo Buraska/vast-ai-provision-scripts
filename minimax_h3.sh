@@ -42,6 +42,109 @@ set -u
 npm install -g @civitai/cli
 civitai login --token "$CIVITAI_TOKEN"
 
+# curl and jq are required for resumable, checksum-verified Civitai downloads.
+apt-get update
+apt-get install -y curl ca-certificates jq
+
+download_civitai_primary() {
+  local version_id="$1"
+  local output_dir="$2"
+  local version_json file_info
+  local file_id filename expected_sha expected_size
+  local target part_file part_size actual_size attempt curl_ok=0
+
+  version_json="$(civitai model-versions get "$version_id" --json)"
+  file_info="$(jq -er '
+    [.files[] | select(.primary == true)]
+    | if length != 1 then error("expected exactly one primary file")
+      else .[0] | [.id, .name, .hashes.SHA256, ((.sizeKB * 1024) | round)] | @tsv
+      end
+  ' <<< "$version_json")"
+  IFS=$'\t' read -r file_id filename expected_sha expected_size <<< "$file_info"
+
+  if [[ ! "$file_id" =~ ^[0-9]+$ ||
+        ! "$expected_sha" =~ ^[[:xdigit:]]{64}$ ||
+        ! "$expected_size" =~ ^[0-9]+$ ||
+        -z "$filename" || "$filename" == */* ||
+        "$filename" == "." || "$filename" == ".." ||
+        "$filename" == *$'\n'* ]]; then
+    printf 'Invalid primary file metadata for Civitai version %s\n' "$version_id" >&2
+    return 1
+  fi
+
+  mkdir -p -- "$output_dir"
+  target="$output_dir/$filename"
+  part_file="$target.part"
+  if [[ -f "$target" ]] &&
+     printf '%s  %s\n' "$expected_sha" "$target" | sha256sum --check --status; then
+    printf 'Already verified: %s\n' "$target"
+    return 0
+  fi
+
+  if [[ -f "$part_file" ]]; then
+    part_size="$(stat -c '%s' "$part_file")"
+    if (( part_size > expected_size )); then
+      rm -f -- "$part_file"
+    elif (( part_size == expected_size )); then
+      if printf '%s  %s\n' "$expected_sha" "$part_file" | sha256sum --check --status; then
+        mv -f -- "$part_file" "$target"
+        printf 'Resumed and verified: %s\n' "$target"
+        return 0
+      fi
+      rm -f -- "$part_file"
+    fi
+  fi
+
+  printf 'Downloading Civitai version %s: %s\n' "$version_id" "$filename"
+  for ((attempt = 1; attempt <= 5; attempt++)); do
+    curl --fail --show-error --location --continue-at - \
+      --connect-timeout 30 --output "$part_file" --progress-bar \
+      --config <(printf 'header = "Authorization: Bearer %s"\n' "$CIVITAI_TOKEN") \
+      "https://civitai.com/api/download/models/${version_id}?fileId=${file_id}" || true
+
+    if [[ -f "$part_file" ]]; then
+      actual_size="$(stat -c '%s' "$part_file")"
+      if (( actual_size == expected_size )); then
+        if printf '%s  %s\n' "$expected_sha" "$part_file" | sha256sum --check --status; then
+          curl_ok=1
+          break
+        fi
+        rm -f -- "$part_file"
+      elif (( actual_size > expected_size )); then
+        rm -f -- "$part_file"
+      fi
+    fi
+
+    if (( attempt < 5 )); then
+      printf 'Civitai transfer interrupted; resuming in %s seconds (attempt %s/5).\n' \
+        "$((attempt * 5))" "$attempt" >&2
+      sleep "$((attempt * 5))"
+    fi
+  done
+
+  if (( curl_ok == 0 )); then
+    printf 'Civitai transfer failed after 5 attempts; resumable data retained at %s\n' \
+      "$part_file" >&2
+    return 1
+  fi
+
+  actual_size="$(stat -c '%s' "$part_file")"
+  if (( actual_size != expected_size )); then
+    printf 'Civitai size mismatch for %s: got %s bytes, expected %s; resumable partial retained.\n' \
+      "$filename" "$actual_size" "$expected_size" >&2
+    return 1
+  fi
+  if ! printf '%s  %s\n' "$expected_sha" "$part_file" | sha256sum --check --status; then
+    rm -f -- "$part_file"
+    printf 'Civitai SHA-256 mismatch; discarded the corrupt file: %s\n' "$filename" >&2
+    return 1
+  fi
+
+  mv -f -- "$part_file" "$target"
+  printf 'Verified: %s\n' "$target"
+}
+
+
 download_hf_file() {
   local repo="$1"
   local remote_path="$2"
@@ -97,22 +200,21 @@ download_hf_file \
 #   minimax_h3_latent_upscaler_3d_conv_v1/minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors \
 #   ./models/latent_upscale_models/minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors
 
-civitai download --model 2836176 --out-dir ./models/loras
-civitai download --version 3266628 --out-dir ./models/loras
-civitai download --version 3354822 --out-dir ./models/loras
+download_civitai_primary 3303468 ./models/loras
+download_civitai_primary 3266628 ./models/loras
+download_civitai_primary 3354822 ./models/loras
 
-civitai download --version 3257589 --out-dir ./models/loras
-civitai download --version 3283175 --out-dir ./models/loras
+download_civitai_primary 3257589 ./models/loras
+download_civitai_primary 3283175 ./models/loras
 
-civitai download --version 3265246 --out-dir ./models/loras
+download_civitai_primary 3265246 ./models/loras
 
-civitai download --version 3203205 --out-dir ./models/loras
-civitai download --version 3258590 --out-dir ./models/loras
-civitai download --version 3283175 --out-dir ./models/loras
-
+download_civitai_primary 3203205 ./models/loras
+download_civitai_primary 3258590 ./models/loras
+download_civitai_primary 3283175 ./models/loras
 
 # h3 max ero
-civitai download --version 3393047 --out-dir ./models/diffusion_models
+download_civitai_primary 3393047 ./models/diffusion_models
 
 
 # Install the Gemma GGUF alongside the MiniMax H3 ComfyUI assets.
@@ -128,9 +230,6 @@ GEMMA_PROJECTOR_PATH="/workspace/models/$GEMMA_PROJECTOR_FILE"
 echo "=== Checking GPU for Ollama ==="
 nvidia-smi
 
-echo "=== Installing Ollama dependencies ==="
-apt-get update
-apt-get install -y curl ca-certificates
 
 mkdir -p /workspace/models "$OLLAMA_DIR"
 
