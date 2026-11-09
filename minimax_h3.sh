@@ -208,13 +208,15 @@ download_civitai_primary 3257589 ./models/loras
 download_civitai_primary 3283175 ./models/loras
 civitai download --version 3386948 --out-dir ./ComfyUI/models/loras/ # Anime 
 download_civitai_primary 3265246 ./models/loras
+hf download hf://Pika-Labs/Pika-H3-Flex-Turbo-LoRA/pika_h3_flex_turbo_8step_hd_ref2va.safetensors --local-dir ./ComfyUI/models/loras/ # PIKA
 
 download_civitai_primary 3203205 ./models/loras
 download_civitai_primary 3258590 ./models/loras
 download_civitai_primary 3283175 ./models/loras
 
-# h3 max ero
+# h3 max 
 download_civitai_primary 3393047 ./models/diffusion_models
+hf download hf://WarmBloodAban/Minimax-h3_Singularity/Minimax-h3_Singularity_ref2va_v2_int8.safetensors --local-dir ./ComfyUI/models/difussion_models/ #singularity gb
 
 
 # Install the Gemma GGUF alongside the MiniMax H3 ComfyUI assets.
