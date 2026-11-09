@@ -218,80 +218,80 @@ download_civitai_primary 3393047 ./models/diffusion_models
 
 
 # Install the Gemma GGUF alongside the MiniMax H3 ComfyUI assets.
-GEMMA_REPO="okanity/gemma-4-31B-it-uncensored-heretic-GGUF"
-GEMMA_FILE="gemma-4-31B-it-uncensored-heretic-Q5_K_M.gguf"
-GEMMA_PROJECTOR_FILE="gemma-4-31B-it-mmproj-BF16.gguf"
-GEMMA_NAME="gemma4-heretic:12k-vision"
-OLLAMA_DIR="/workspace/ollama-data"
-OLLAMA_LOG="/workspace/ollama.log"
-GEMMA_PATH="/workspace/models/$GEMMA_FILE"
-GEMMA_PROJECTOR_PATH="/workspace/models/$GEMMA_PROJECTOR_FILE"
+# GEMMA_REPO="okanity/gemma-4-31B-it-uncensored-heretic-GGUF"
+# GEMMA_FILE="gemma-4-31B-it-uncensored-heretic-Q5_K_M.gguf"
+# GEMMA_PROJECTOR_FILE="gemma-4-31B-it-mmproj-BF16.gguf"
+# GEMMA_NAME="gemma4-heretic:12k-vision"
+# OLLAMA_DIR="/workspace/ollama-data"
+# OLLAMA_LOG="/workspace/ollama.log"
+# GEMMA_PATH="/workspace/models/$GEMMA_FILE"
+# GEMMA_PROJECTOR_PATH="/workspace/models/$GEMMA_PROJECTOR_FILE"
 
-echo "=== Checking GPU for Ollama ==="
-nvidia-smi
+# echo "=== Checking GPU for Ollama ==="
+# nvidia-smi
 
 
-mkdir -p /workspace/models "$OLLAMA_DIR"
+# mkdir -p /workspace/models "$OLLAMA_DIR"
 
-echo "=== Installing Ollama ==="
-if ! command -v ollama >/dev/null 2>&1; then
-  curl -fsSL https://ollama.com/install.sh | sh
-fi
+# echo "=== Installing Ollama ==="
+# if ! command -v ollama >/dev/null 2>&1; then
+#   curl -fsSL https://ollama.com/install.sh | sh
+# fi
 
-echo "=== Starting Ollama ==="
-export OLLAMA_HOST="127.0.0.1:11434"
-export OLLAMA_MODELS="$OLLAMA_DIR"
-export OLLAMA_CONTEXT_LENGTH=12288
+# echo "=== Starting Ollama ==="
+# export OLLAMA_HOST="127.0.0.1:11434"
+# export OLLAMA_MODELS="$OLLAMA_DIR"
+# export OLLAMA_CONTEXT_LENGTH=12288
 
-if command -v systemctl >/dev/null 2>&1; then
-  systemctl stop ollama 2>/dev/null || true
-fi
-pkill -x ollama 2>/dev/null || true
-sleep 2
-nohup ollama serve > "$OLLAMA_LOG" 2>&1 &
-echo $! > /workspace/ollama.pid
+# if command -v systemctl >/dev/null 2>&1; then
+#   systemctl stop ollama 2>/dev/null || true
+# fi
+# pkill -x ollama 2>/dev/null || true
+# sleep 2
+# nohup ollama serve > "$OLLAMA_LOG" 2>&1 &
+# echo $! > /workspace/ollama.pid
 
-echo "=== Waiting for Ollama API ==="
-READY=0
-for i in $(seq 1 60); do
-  if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null 2>&1; then
-    READY=1
-    break
-  fi
-  sleep 2
-done
-if [[ "$READY" -ne 1 ]]; then
-  echo "Ollama failed to start. Log:"
-  tail -80 "$OLLAMA_LOG"
-  exit 1
-fi
+# echo "=== Waiting for Ollama API ==="
+# READY=0
+# for i in $(seq 1 60); do
+#   if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null 2>&1; then
+#     READY=1
+#     break
+#   fi
+#   sleep 2
+# done
+# if [[ "$READY" -ne 1 ]]; then
+#   echo "Ollama failed to start. Log:"
+#   tail -80 "$OLLAMA_LOG"
+#   exit 1
+# fi
 
-echo "=== Downloading Gemma 4 Q5_K_M and vision projector ==="
-download_hf_file "$GEMMA_REPO" "$GEMMA_FILE" "$GEMMA_PATH"
-download_hf_file "$GEMMA_REPO" "$GEMMA_PROJECTOR_FILE" "$GEMMA_PROJECTOR_PATH"
+# echo "=== Downloading Gemma 4 Q5_K_M and vision projector ==="
+# download_hf_file "$GEMMA_REPO" "$GEMMA_FILE" "$GEMMA_PATH"
+# download_hf_file "$GEMMA_REPO" "$GEMMA_PROJECTOR_FILE" "$GEMMA_PROJECTOR_PATH"
 
-cat > /workspace/Modelfile.vision <<EOF
-FROM $GEMMA_PATH
-FROM $GEMMA_PROJECTOR_PATH
-PARAMETER num_ctx 12288
-PARAMETER temperature 0.7
-EOF
+# cat > /workspace/Modelfile.vision <<EOF
+# FROM $GEMMA_PATH
+# FROM $GEMMA_PROJECTOR_PATH
+# PARAMETER num_ctx 12288
+# PARAMETER temperature 0.7
+# EOF
 
-echo "=== Importing Gemma vision model into Ollama ==="
-ollama create "$GEMMA_NAME" -f /workspace/Modelfile.vision
-if ! ollama show "$GEMMA_NAME" | grep -qi vision; then
-  echo "Gemma vision model was created without vision capability." >&2
-  exit 1
-fi
-ollama list
+# echo "=== Importing Gemma vision model into Ollama ==="
+# ollama create "$GEMMA_NAME" -f /workspace/Modelfile.vision
+# if ! ollama show "$GEMMA_NAME" | grep -qi vision; then
+#   echo "Gemma vision model was created without vision capability." >&2
+#   exit 1
+# fi
+# ollama list
 
-echo "=== Testing Gemma model ==="
-curl -fsS http://127.0.0.1:11434/api/generate \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "gemma4-heretic:12k-vision",
-    "prompt": "Say hello in Russian.",
-    "stream": false,
-    "options": {"num_ctx": 12288, "num_predict": 60}
-  }'
-echo
+# echo "=== Testing Gemma model ==="
+# curl -fsS http://127.0.0.1:11434/api/generate \
+#   -H "Content-Type: application/json" \
+#   -d '{
+#     "model": "gemma4-heretic:12k-vision",
+#     "prompt": "Say hello in Russian.",
+#     "stream": false,
+#     "options": {"num_ctx": 12288, "num_predict": 60}
+#   }'
+# echo
