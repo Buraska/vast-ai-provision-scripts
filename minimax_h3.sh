@@ -206,7 +206,7 @@ download_civitai_primary 3354822 ./models/loras
 
 download_civitai_primary 3257589 ./models/loras
 download_civitai_primary 3283175 ./models/loras
-civitai download --version 3386948 --out-dir ./ComfyUI/models/loras/ # Anime 
+civitai download --model 3386948 --out-dir ./ComfyUI/models/loras/ # Anime 
 download_civitai_primary 3265246 ./models/loras
 hf download hf://Pika-Labs/Pika-H3-Flex-Turbo-LoRA/pika_h3_flex_turbo_8step_hd_ref2va.safetensors --local-dir ./ComfyUI/models/loras/ # PIKA
 
