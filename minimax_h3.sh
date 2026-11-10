@@ -218,6 +218,12 @@ download_civitai_primary 3283175 ./models/loras
 download_civitai_primary 3393047 ./models/diffusion_models
 hf download hf://WarmBloodAban/Minimax-h3_Singularity/Minimax-h3_Singularity_ref2va_v2_int8.safetensors --local-dir ./ComfyUI/models/difussion_models/ #singularity gb
 
+# MiniMax H3 Singularity Ref2VA v2 INT8
+download_hf_file \
+  WarmBloodAban/Minimax-h3_Singularity \
+  Minimax-h3_Singularity_ref2va_v2_int8.safetensors \
+  ./models/diffusion_models/Minimax-h3_Singularity_ref2va_v2_int8.safetensors
+
 
 # Install the Gemma GGUF alongside the MiniMax H3 ComfyUI assets.
 # GEMMA_REPO="okanity/gemma-4-31B-it-uncensored-heretic-GGUF"
