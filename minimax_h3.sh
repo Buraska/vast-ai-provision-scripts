@@ -206,7 +206,7 @@ download_civitai_primary 3354822 ./models/loras
 
 download_civitai_primary 3257589 ./models/loras
 download_civitai_primary 3283175 ./models/loras
-civitai download --model 3386948 --out-dir ./ComfyUI/models/loras/ # Anime 
+civitai download --model 3045273 --out-dir ./ComfyUI/models/loras/ # Anime 
 download_civitai_primary 3265246 ./models/loras
 hf download hf://Pika-Labs/Pika-H3-Flex-Turbo-LoRA/pika_h3_flex_turbo_8step_hd_ref2va.safetensors --local-dir ./ComfyUI/models/loras/ # PIKA
 
@@ -225,9 +225,9 @@ download_hf_file \
   ./models/diffusion_models/Minimax-h3_Singularity_ref2va_v2_int8.safetensors
 
 
-# Install the Gemma GGUF alongside the MiniMax H3 ComfyUI assets.
 # GEMMA_REPO="okanity/gemma-4-31B-it-uncensored-heretic-GGUF"
-# GEMMA_FILE="gemma-4-31B-it-uncensored-heretic-Q5_K_M.gguf"
+# GEMMA_FILE="gemma-4-31B-it-uncensored-heretic-Q4_K_M.gguf" 
+# # GEMMA_FILE="gemma-4-31B-it-uncensored-heretic-Q5_K_M.gguf"
 # GEMMA_PROJECTOR_FILE="gemma-4-31B-it-mmproj-BF16.gguf"
 # GEMMA_NAME="gemma4-heretic:12k-vision"
 # OLLAMA_DIR="/workspace/ollama-data"
