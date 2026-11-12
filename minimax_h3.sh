@@ -213,16 +213,13 @@ hf download hf://Pika-Labs/Pika-H3-Flex-Turbo-LoRA/pika_h3_flex_turbo_8step_hd_r
 download_civitai_primary 3203205 ./models/loras
 download_civitai_primary 3258590 ./models/loras
 download_civitai_primary 3283175 ./models/loras
-hf download hf://Comfy-Org/MiniMax-H3/loras/minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors  ./ComfyUI/models/loras/
+hf download hf://Comfy-Org/MiniMax-H3/loras/minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors --local-dir ./ComfyUI/models/loras/
 # h3 max 
 download_civitai_primary 3393047 ./models/diffusion_models
 hf download hf://WarmBloodAban/Minimax-h3_Singularity/Minimax-h3_Singularity_ref2va_v2_int8.safetensors --local-dir ./ComfyUI/models/diffusion_models/ #singularity gb
 
 # MiniMax H3 Singularity Ref2VA v2 INT8
-download_hf_file \
-  WarmBloodAban/Minimax-h3_Singularity \
-  Minimax-h3_Singularity_ref2va_v2_int8.safetensors \
-  ./models/diffusion_models/Minimax-h3_Singularity_ref2va_v2_int8.safetensors
+
 
 
 # GEMMA_REPO="okanity/gemma-4-31B-it-uncensored-heretic-GGUF"
