@@ -254,8 +254,8 @@ download_civitai_primary 3393047 ./models/diffusion_models
 
 
 # GEMMA_REPO="okanity/gemma-4-31B-it-uncensored-heretic-GGUF"
-# GEMMA_FILE="gemma-4-31B-it-uncensored-heretic-Q4_K_M.gguf" 
-# # GEMMA_FILE="gemma-4-31B-it-uncensored-heretic-Q5_K_M.gguf"
+# # GEMMA_FILE="gemma-4-31B-it-uncensored-heretic-Q4_K_M.gguf" 
+# GEMMA_FILE="gemma-4-31B-it-uncensored-heretic-Q5_K_M.gguf"
 # GEMMA_PROJECTOR_FILE="gemma-4-31B-it-mmproj-BF16.gguf"
 # GEMMA_NAME="gemma4-heretic:12k-vision"
 # OLLAMA_DIR="/workspace/ollama-data"
