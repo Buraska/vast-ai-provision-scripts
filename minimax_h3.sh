@@ -303,8 +303,11 @@ download_civitai_primary 3393047 ./models/diffusion_models
 # fi
 
 # echo "=== Downloading Gemma 4 Q5_K_M and vision projector ==="
-# download_hf_file "$GEMMA_REPO" "$GEMMA_FILE" "$GEMMA_PATH"
-# download_hf_file "$GEMMA_REPO" "$GEMMA_PROJECTOR_FILE" "$GEMMA_PROJECTOR_PATH"
+# huggingface-cli download "$GEMMA_REPO" "$GEMMA_FILE" \
+#   --local-dir "$(dirname "$GEMMA_PATH")"
+
+# huggingface-cli download "$GEMMA_REPO" "$GEMMA_PROJECTOR_FILE" \
+#   --local-dir "$(dirname "$GEMMA_PROJECTOR_PATH")"
 
 # cat > /workspace/Modelfile.vision <<EOF
 # FROM $GEMMA_PATH
