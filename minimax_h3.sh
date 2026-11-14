@@ -211,15 +211,15 @@ download_hf_file \
   ./models/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors
 
 # MiniMax H3 Image model and VAE
-download_hf_file \
-  Comfy-Org/MiniMax-H3-Image \
-  diffusion_models/minimax_h3_image_pruned_int8_convrot.safetensors \
-  ./models/diffusion_models/minimax_h3_image_pruned_int8_convrot.safetensors
+# download_hf_file \
+#   Comfy-Org/MiniMax-H3-Image \
+#   diffusion_models/minimax_h3_image_pruned_int8_convrot.safetensors \
+#   ./models/diffusion_models/minimax_h3_image_pruned_int8_convrot.safetensors
 
-download_hf_file \
-  Comfy-Org/MiniMax-H3-Image \
-  vae/minimax_h3_image_vae_fp16.safetensors \
-  ./models/vae/minimax_h3_image_vae_fp16.safetensors
+# download_hf_file \
+#   Comfy-Org/MiniMax-H3-Image \
+#   vae/minimax_h3_image_vae_fp16.safetensors \
+#   ./models/vae/minimax_h3_image_vae_fp16.safetensors
 
   
 
@@ -244,7 +244,7 @@ download_civitai_primary 3386948 ./models/loras # Anime
 download_civitai_primary 3203205 ./models/loras
 download_civitai_primary 3258590 ./models/loras
 download_civitai_primary 3283175 ./models/loras
-hf download hf://Comfy-Org/MiniMax-H3/loras/minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors --local-dir ./ComfyUI/models/loras/
+# hf download hf://Comfy-Org/MiniMax-H3/loras/minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors --local-dir ./ComfyUI/models/loras/
 # h3 max 
 download_civitai_primary 3393047 ./models/diffusion_models
 
