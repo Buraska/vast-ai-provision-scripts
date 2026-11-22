@@ -247,7 +247,7 @@ download_civitai_primary 3283175 ./models/loras
 # hf download hf://Comfy-Org/MiniMax-H3/loras/minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors --local-dir ./ComfyUI/models/loras/
 # h3 max 
 download_civitai_primary 3393047 ./models/diffusion_models
-
+civitai download --model 2851079 --out-dir ./ComfyUI/models/diffusion_models/
 
 # MiniMax H3 Singularity Ref2VA v2 INT8
 
