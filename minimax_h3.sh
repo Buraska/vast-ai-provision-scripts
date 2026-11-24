@@ -164,6 +164,7 @@ install_custom_node https://github.com/pythongosssss/ComfyUI-Custom-Scripts.git 
 install_custom_node https://github.com/ethanfel/ComfyUI-H3-Prompt-IDE.git ComfyUI-H3-Prompt-IDE
 install_custom_node https://github.com/pixaroma/ComfyUI-Pixaroma.git ComfyUI-Pixaroma
 install_custom_node https://github.com/AHEKOT/ComfyUI_VNCCS_Utils.git ComfyUI_VNCCS_Utils
+install_custom_node https://github.com/matlowai/ComfyUI-Dials.git ComfyUI-Dials
 
 
 download_hf_file() {
@@ -249,6 +250,162 @@ download_civitai_primary 3283175 ./models/loras
 download_civitai_primary 3393047 ./models/diffusion_models
 download_civitai_primary 3429412 ./models/diffusion_models
 # civitai download --model 2851079 --out-dir ./ComfyUI/models/diffusion_models/
+# Dials loras for ComfyUI-Dials custom node
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_arcane_sigils.safetensors \
+  ./models/loras/h3_arcane_sigils.safetensors || echo '[provision] download failed: h3_arcane_sigils, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_aura.safetensors \
+  ./models/loras/h3_aura.safetensors || echo '[provision] download failed: h3_aura, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_blur_moving_edges_hook.safetensors \
+  ./models/loras/h3_blur_moving_edges_hook.safetensors || echo '[provision] download failed: h3_blur_moving_edges_hook, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_colour_drain.safetensors \
+  ./models/loras/h3_colour_drain.safetensors || echo '[provision] download failed: h3_colour_drain, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_dramatic_light.safetensors \
+  ./models/loras/h3_dramatic_light.safetensors || echo '[provision] download failed: h3_dramatic_light, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_evil_cold.safetensors \
+  ./models/loras/h3_evil_cold.safetensors || echo '[provision] download failed: h3_evil_cold, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_evil_corrupted.safetensors \
+  ./models/loras/h3_evil_corrupted.safetensors || echo '[provision] download failed: h3_evil_corrupted, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_evil_creepy.safetensors \
+  ./models/loras/h3_evil_creepy.safetensors || echo '[provision] download failed: h3_evil_creepy, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_evil_dread.safetensors \
+  ./models/loras/h3_evil_dread.safetensors || echo '[provision] download failed: h3_evil_dread, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_evil_impish.safetensors \
+  ./models/loras/h3_evil_impish.safetensors || echo '[provision] download failed: h3_evil_impish, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_evil_seductive.safetensors \
+  ./models/loras/h3_evil_seductive.safetensors || echo '[provision] download failed: h3_evil_seductive, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_evil_sinister.safetensors \
+  ./models/loras/h3_evil_sinister.safetensors || echo '[provision] download failed: h3_evil_sinister, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_evil_unhinged.safetensors \
+  ./models/loras/h3_evil_unhinged.safetensors || echo '[provision] download failed: h3_evil_unhinged, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_impact_frame.safetensors \
+  ./models/loras/h3_impact_frame.safetensors || echo '[provision] download failed: h3_impact_frame, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_ink_wash.safetensors \
+  ./models/loras/h3_ink_wash.safetensors || echo '[provision] download failed: h3_ink_wash, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_motion.safetensors \
+  ./models/loras/h3_motion.safetensors || echo '[provision] download failed: h3_motion, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_motion_lora.safetensors \
+  ./models/loras/h3_motion_lora.safetensors || echo '[provision] download failed: h3_motion_lora, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_psychedelic.safetensors \
+  ./models/loras/h3_psychedelic.safetensors || echo '[provision] download failed: h3_psychedelic, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_space_warp.safetensors \
+  ./models/loras/h3_space_warp.safetensors || echo '[provision] download failed: h3_space_warp, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_storm.safetensors \
+  ./models/loras/h3_storm.safetensors || echo '[provision] download failed: h3_storm, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_x_datamosh.safetensors \
+  ./models/loras/h3_x_datamosh.safetensors || echo '[provision] download failed: h3_x_datamosh, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_x_film_artifact.safetensors \
+  ./models/loras/h3_x_film_artifact.safetensors || echo '[provision] download failed: h3_x_film_artifact, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_x_memory_present.safetensors \
+  ./models/loras/h3_x_memory_present.safetensors || echo '[provision] download failed: h3_x_memory_present, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_x_oil_pixel.safetensors \
+  ./models/loras/h3_x_oil_pixel.safetensors || echo '[provision] download failed: h3_x_oil_pixel, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_x_order_entropy.safetensors \
+  ./models/loras/h3_x_order_entropy.safetensors || echo '[provision] download failed: h3_x_order_entropy, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_x_owl_octopus.safetensors \
+  ./models/loras/h3_x_owl_octopus.safetensors || echo '[provision] download failed: h3_x_owl_octopus, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_x_silentfilm_cyberpunk.safetensors \
+  ./models/loras/h3_x_silentfilm_cyberpunk.safetensors || echo '[provision] download failed: h3_x_silentfilm_cyberpunk, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_x_sinister_noview.safetensors \
+  ./models/loras/h3_x_sinister_noview.safetensors || echo '[provision] download failed: h3_x_sinister_noview, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_x_template_placebo.safetensors \
+  ./models/loras/h3_x_template_placebo.safetensors || echo '[provision] download failed: h3_x_template_placebo, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_x_vhs.safetensors \
+  ./models/loras/h3_x_vhs.safetensors || echo '[provision] download failed: h3_x_vhs, continuing' >&2
+
+
+# MiniMax H3 Singularity Ref2VA v2 INT8
+
+
 
 # GEMMA_REPO="okanity/gemma-4-31B-it-uncensored-heretic-GGUF"
 # # GEMMA_FILE="gemma-4-31B-it-uncensored-heretic-Q4_K_M.gguf" 
