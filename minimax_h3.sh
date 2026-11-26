@@ -221,10 +221,10 @@ download_hf_file \
   frame_interpolation/rife_v4.26.safetensors \
   ./models/frame_interpolation/rife_v4.26.safetensors
 
-# download_hf_file \
-#   LBH-123-AI/Minimax_h3_latent_Upscaler \
-#   minimax_h3_latent_upscaler_3d_conv_v1/minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors \
-#   ./models/latent_upscale_models/minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors
+download_hf_file \
+  LBH-123-AI/Minimax_h3_latent_Upscaler \
+  minimax_h3_latent_upscaler_3d_conv_v1/minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors \
+  ./models/latent_upscale_models/minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors
 
 download_civitai_primary 3303468 ./models/loras
 download_civitai_primary 3266628 ./models/loras
@@ -399,6 +399,9 @@ download_hf_file \
   Comfy-Org/MiniMax-H3 \
   vae/minimax_h3_video_vae_int8_convrot.safetensors   \
   ./models/vae/minimax_h3_video_vae_int8_convrot.safetensors   || echo '[provision] download failed: minimax_h3_video_vae_int8.safetensors , continuing' >&2
+
+download_civitai_primary 3421124 ./models/loras || echo '[provision] download failed: [MMH3] Realism Slider - v1.0, continuing' >&2 # [MMH3] Realism Slider - v1.0
+
 
 
 # MiniMax H3 Singularity Ref2VA v2 INT8
