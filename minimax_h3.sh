@@ -241,7 +241,6 @@ download_civitai_primary 3283175 ./models/loras
 # hf download hf://Comfy-Org/MiniMax-H3/loras/minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors --local-dir ./ComfyUI/models/loras/
 # h3 max 
 # download_civitai_primary 3393047 ./models/diffusion_models
-download_civitai_primary 3436549 ./models/diffusion_models
 download_civitai_primary 3429412 ./models/diffusion_models
 # civitai download --model 2851079 --out-dir ./ComfyUI/models/diffusion_models/
 # Dials loras for ComfyUI-Dials custom node
@@ -398,8 +397,8 @@ download_hf_file \
 
 download_hf_file \
   Comfy-Org/MiniMax-H3 \
-  vae/minimax_h3_sol_vae_int8_convrot.safetensors \
-  ./models/vae/minimax_h3_sol_vae_int8_convrot.safetensors || echo '[provision] download failed: minimax_h3_sol_vae_int8_convrot.safetensors, continuing' >&2
+  vae/minimax_h3_video_vae_int8_convrot.safetensors   \
+  ./models/vae/minimax_h3_video_vae_int8_convrot.safetensors   || echo '[provision] download failed: minimax_h3_video_vae_int8.safetensors , continuing' >&2
 
 
 # MiniMax H3 Singularity Ref2VA v2 INT8
