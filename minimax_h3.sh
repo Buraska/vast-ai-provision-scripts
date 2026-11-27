@@ -27,7 +27,7 @@ mv "$env_tmp" "$workspace_env"
 : "${HF_TOKEN:?Set HF_TOKEN in the environment before provisioning}"
 : "${CIVITAI_TOKEN:?Set CIVITAI_TOKEN in the environment before provisioning}"
 
-mkdir -p ./models/diffusion_models ./models/text_encoders ./models/vae ./models/loras ./models/checkpoints ./models/frame_interpolation ./models/latent_upscale_models
+mkdir -p ./models/diffusion_models ./models/text_encoders ./models/vae ./models/loras ./models/loras/H3 ./models/checkpoints ./models/frame_interpolation ./models/latent_upscale_models ./models/ultralytics/bbox ./models/ultralytics/segm ./models/sams
 
 hf auth login --token "$HF_TOKEN"
 export NVM_DIR=/opt/nvm
@@ -148,7 +148,7 @@ mkdir -p ./custom_nodes
 install_custom_node() {
   local repo="$1"
   local name="$2"
-  local path="./custom_nodes/$name"
+  local path="${3:-./custom_nodes/$name}"
 
   if [[ ! -d "$path" ]]; then
     git clone --depth 1 "$repo" "$path"
@@ -165,6 +165,103 @@ install_custom_node https://github.com/ethanfel/ComfyUI-H3-Prompt-IDE.git ComfyU
 install_custom_node https://github.com/pixaroma/ComfyUI-Pixaroma.git ComfyUI-Pixaroma
 install_custom_node https://github.com/AHEKOT/ComfyUI_VNCCS_Utils.git ComfyUI_VNCCS_Utils
 install_custom_node https://github.com/matlowai/ComfyUI-Dials.git ComfyUI-Dials
+install_custom_node https://github.com/xm6018924/BSAI-ComfyUI-FaceRefine BSAI-ComfyUI-FaceRefine
+install_custom_node https://github.com/city96/ComfyUI-GGUF.git ComfyUI-GGUF
+install_custom_node https://github.com/kael558/ComfyUI-GGUF-FantasyTalking ComfyUI-GGUF-FantasyTalking
+install_custom_node https://github.com/badgids/ComfyUI-H3-ExactAudioLock ComfyUI-H3-ExactAudioLock
+install_custom_node https://github.com/cicalooo/ComfyUI-H3-PowerLoraStack ComfyUI-H3-PowerLoraStack
+install_custom_node https://github.com/Comfy-Org/ComfyUI-Manager ComfyUI-Manager
+install_custom_node https://github.com/olduvai-jp/ComfyUI-S3-IO ComfyUI-S3-IO
+install_custom_node https://github.com/TripleHeadedMonkey/ComfyUI-Zlycoris ComfyUI-Zlycoris
+install_custom_node https://github.com/IAMCCS/IAMCCS-nodes IAMCCS-nodes
+install_custom_node https://github.com/helto4real/comfyui-all-on-one-image-generation-node comfyui-all-on-one-image-generation-node
+install_custom_node https://github.com/Carasibana/ComfyUI-H3-FaceRefine comfyui-h3-facerefine
+install_custom_node https://github.com/ltdrdata/ComfyUI-Impact-Pack comfyui-impact-pack
+install_custom_node https://github.com/mickmumpitz/ComfyUI-Mickmumpitz-Nodes.git comfyui-mickmumpitz-nodes
+install_custom_node https://github.com/stavsap/comfyui-ollama comfyui-ollama
+install_custom_node https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite comfyui-videohelpersuite
+install_custom_node https://github.com/jtydhr88/ComfyUI-Workflow-Encrypt comfyui-workflow-encrypt
+install_custom_node https://github.com/SethRobinson/comfyui-workflow-to-api-converter-endpoint comfyui-workflow-to-api-converter-endpoint
+install_custom_node https://github.com/Comfy-Org/ComfyUI_Nvidia_VFX_Nodes.git comfyui_nvidia_rtx_nodes
+install_custom_node https://github.com/malkuthro/ComfyUI-Koolook.git koolook
+install_custom_node https://github.com/LordLocksley/ComfyUI-Lokken-VideoTools.git lokken-videotools
+install_custom_node https://github.com/Pikselkroken/ComfyUI-PixlStash.git pixlstash
+install_custom_node https://github.com/rgthree/rgthree-comfy.git rgthree-comfy
+
+# The repository contains the NativeAudioLock node in a nested custom_nodes folder.
+# Keep the workflow repository outside custom_nodes, then install only the actual node.
+native_audio_source=./provision_sources/MiniMax-H3-NativeAudio-MusicVideo-Workflow
+mkdir -p ./provision_sources
+install_custom_node https://github.com/Shrek3OnVH5/MiniMax-H3-NativeAudio-MusicVideo-Workflow MiniMax-H3-NativeAudio-MusicVideo-Workflow "$native_audio_source"
+mkdir -p ./custom_nodes/ComfyUI-H3-NativeAudioLock
+cp -a "$native_audio_source/custom_nodes/ComfyUI-H3-NativeAudioLock/." ./custom_nodes/ComfyUI-H3-NativeAudioLock/
+
+cat > ./custom_nodes/h3_director_guide_size.py <<'PY'
+class H3DirectorGuideAtSize:
+    """Build a second Director guide without changing the first pass."""
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {
+            "guide": ("MINIMAX_H3_DIRECTOR_GUIDE",),
+            "width": ("INT", {"min": 32, "max": 16384, "step": 32}),
+            "height": ("INT", {"min": 32, "max": 16384, "step": 32}),
+        }}
+
+    RETURN_TYPES = ("MINIMAX_H3_DIRECTOR_GUIDE",)
+    FUNCTION = "resize_guide"
+    CATEGORY = "conditioning/minimax"
+
+    def resize_guide(self, guide, width, height):
+        if not isinstance(guide, dict):
+            raise ValueError("Expected a MiniMax H3 Director guide.")
+        if width < 32 or height < 32 or width % 32 or height % 32:
+            raise ValueError("Pass 2 dimensions must be positive multiples of 32.")
+        continuity = guide.get("continuity") or {}
+        if continuity.get("operation") == "continue":
+            raise ValueError("Pass 2 Director conditioning does not support continuation. Use H3 Tiled Upscale for continuation.")
+        resized = {**guide, "width": width, "height": height}
+        resized.pop("continuity", None)
+        return (resized,)
+
+
+NODE_CLASS_MAPPINGS = {"H3DirectorGuideAtSize": H3DirectorGuideAtSize}
+NODE_DISPLAY_NAME_MAPPINGS = {"H3DirectorGuideAtSize": "H3 Director Guide at Size"}
+PY
+
+cat > ./custom_nodes/websocket_image_save.py <<'PY'
+from PIL import Image
+import numpy as np
+import comfy.utils
+import time
+
+
+class SaveImageWebsocket:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {"images": ("IMAGE",)}}
+
+    RETURN_TYPES = ()
+    FUNCTION = "save_images"
+    OUTPUT_NODE = True
+    CATEGORY = "image"
+
+    def save_images(self, images):
+        pbar = comfy.utils.ProgressBar(images.shape[0])
+        for step, image in enumerate(images):
+            pixels = 255.0 * image.cpu().numpy()
+            img = Image.fromarray(np.clip(pixels, 0, 255).astype(np.uint8))
+            pbar.update_absolute(step, images.shape[0], ("PNG", img, None))
+        return {}
+
+    @classmethod
+    def IS_CHANGED(cls, images):
+        return time.time()
+
+
+NODE_CLASS_MAPPINGS = {"SaveImageWebsocket": SaveImageWebsocket}
+NODE_DISPLAY_NAME_MAPPINGS = {"SaveImageWebsocket": "Save Image (Websocket)"}
+PY
 
 
 download_hf_file() {
@@ -225,6 +322,10 @@ download_hf_file \
   LBH-123-AI/Minimax_h3_latent_Upscaler \
   minimax_h3_latent_upscaler_3d_conv_v1/minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors \
   ./models/latent_upscale_models/minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors
+download_hf_file \
+  LBH-123-AI/Minimax_h3_latent_Upscaler \
+  minimax_h3_latent_upscaler_2d_conv_v1/minimax_h3_latent_upscaler_2d_conv_v1_fp16.safetensors \
+  ./models/latent_upscale_models/minimax_h3_latent_upscaler_2d_conv_v1_fp16.safetensors
 
 download_civitai_primary 3303468 ./models/loras
 download_civitai_primary 3266628 ./models/loras
@@ -237,7 +338,7 @@ download_civitai_primary 3408385 ./models/loras
 
 download_civitai_primary 3203205 ./models/loras
 download_civitai_primary 3258590 ./models/loras
-download_civitai_primary 3283175 ./models/loras
+ 
 # hf download hf://Comfy-Org/MiniMax-H3/loras/minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors --local-dir ./ComfyUI/models/loras/
 # h3 max 
 download_civitai_primary 3429412 ./models/diffusion_models
@@ -402,12 +503,42 @@ download_civitai_primary 3421124 ./models/loras || echo '[provision] download fa
 
 install_custom_node https://github.com/LBH-123-AI/Comfyui_Minimax_h3_latent_Upscaler Comfyui_Minimax_h3_latent_Upscaler
 
-install_custom_node https://github.com/badgids/ComfyUI-H3-ExactAudioLock ComfyUI-H3-ExactAudioLock
+h3_model_file=./models/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors
+h3_misplaced_model=./models/diffusion_models/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors
+if [[ ! -s "$h3_model_file" && -s "$h3_misplaced_model" ]]; then
+  mv -- "$h3_misplaced_model" "$h3_model_file"
+fi
 
-# download_hf_file \
-#   Comfy-Org/MiniMax-H3 \
-#   diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors \
-#   ./models/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors || echo '[provision] download failed: minimax_h3_fl2va_pruned_int8_convrot.safetensors, continuing' >&2
+download_hf_file \
+  Comfy-Org/MiniMax-H3 \
+  diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors \
+  ./models/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors || echo '[provision] download failed: minimax_h3_fl2va_pruned_int8_convrot.safetensors, continuing' >&2
+
+download_hf_file \
+  Comfy-Org/MiniMax-H3 \
+  loras/minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors \
+  ./models/loras/H3/minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors || echo '[provision] download failed: minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors, continuing' >&2
+
+download_hf_file \
+  Bingsu/adetailer \
+  face_yolov8m.pt \
+  ./models/ultralytics/bbox/face_yolov8m.pt || echo '[provision] download failed: face_yolov8m.pt, continuing' >&2
+
+download_hf_file \
+  Bingsu/adetailer \
+  person_yolov8m-seg.pt \
+  ./models/ultralytics/segm/person_yolov8m-seg.pt || echo '[provision] download failed: person_yolov8m-seg.pt, continuing' >&2
+
+download_hf_file \
+  MATLOWAI/H3-Dials \
+  dials/h3_motion.safetensors \
+  ./models/loras/h3_motion.safetensors || echo '[provision] download failed: h3_motion.safetensors, continuing' >&2
+
+if [[ ! -s ./models/sams/sam_vit_b_01ec64.pth ]]; then
+  curl --fail --location --retry 4 --retry-all-errors \
+    https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth \
+    -o ./models/sams/sam_vit_b_01ec64.pth
+fi
 
 
 
